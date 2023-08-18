@@ -18,6 +18,7 @@ export class LoginComponent {
   isValid = true;
 
   ngOnInit(): void {
+    
     if (this.router.url === '/logout') {
       sessionStorage.removeItem("access_token");
       this.router.navigate(['login']);
@@ -31,7 +32,6 @@ export class LoginComponent {
   login(form: NgForm) {
 
     if (form.value.username && form.value.password) {
-
       this.http.post(AppConstants.BASE_URL_API + "/login", JSON.stringify(form.value)).subscribe(
         {
           next: (body: any) => {

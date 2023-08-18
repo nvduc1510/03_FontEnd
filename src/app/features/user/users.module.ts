@@ -8,11 +8,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddComponent } from './add/add.component';
+import { CustomValidateComponent } from './validate/custom-validate/custom-validate.component';
+import { MessageComponent } from './validate/message/message.component';
+import { ConfirmComponent } from './confirm/confirm.component';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
   declarations: [
     UserListComponent,
     AddComponent,
+    CustomValidateComponent,
+    MessageComponent,
+    ConfirmComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserAnimationsModule,

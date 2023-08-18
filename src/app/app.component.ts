@@ -19,10 +19,10 @@ export class AppComponent implements OnInit {
    * @return response()
    */
   ngOnInit(): void {
-    if(!sessionStorage.getItem("access_token")) {
-      this.router.navigate(['login'])
-    } else {
-      this.router.navigate(['user/list'])
-    }
+    // if(!sessionStorage.getItem("access_token")) {
+    //   this.router.navigate(['login'])
+    // } else {
+    //   this.router.navigate(['user/list'])
+    // }
   }
 }

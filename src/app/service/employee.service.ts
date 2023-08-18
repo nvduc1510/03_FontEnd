@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Page } from '../model/Page';
+import { AddEmployeeDTO } from '../model/add_edit/EmployeeResponse';
+import { DetailEmployee } from '../model/detail/DetailEmployee';
 const EMPLOYEE_API = 'http://localhost:8085/employees';
 const httpOptions = {headers : new HttpHeaders ({ 'Content-Type' : 'application/json'})}
 @Injectable({
@@ -36,5 +38,29 @@ export class EmployeeService {
       .set('limit', limit.toString());
       return this.http.get<Page>(EMPLOYEE_API + '/', {params});
   }
+
+  /**
+   * 
+   * @param employee Đối tượng AddEmployeeDTO chứa thông tin về nhân viên mới cần tạo.
+   * @returns trả về một đối tượng Observable<any>
+   */
+  addEmployee(employee: AddEmployeeDTO):Observable<any>{
+    return this.http.post<any>(EMPLOYEE_API,employee);
+  }
+  // updateEmpoyee(employee)
+  updateEmployee(employeeId: number, employeeDTO: AddEmployeeDTO): Observable<any> {
+    const url = `${EMPLOYEE_API}/${employeeId}`;
+    return this.http.put<AddEmployeeDTO>(url, employeeDTO);
+  }
+
+  /**
+   * Gửi một yêu cầu HTTP GET đến một API để lấy thông tin nhân viên dựa trên ID.
+   * @param employeeId ID của nhân viên cần lấy thông tin (kiểu dữ liệu: number).
+   * @returns  trả về một đối tượng Observable<Detail>.
+   */
+    getEmployeeById(employeeId: number): Observable<DetailEmployee> {
+      const url = `${EMPLOYEE_API}/${employeeId}`;
+      return this.http.get<DetailEmployee>(url);
+    }
 
 }

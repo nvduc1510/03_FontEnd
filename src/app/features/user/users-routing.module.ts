@@ -4,11 +4,15 @@ import { SystemErrorComponent } from 'src/app/shared/component/error/system-erro
 import { UserListComponent } from './list/user-list.component';
 import { AuthorizeGuard } from '../../shared/auth/authorize.guard';
 import { AddComponent } from './add/add.component';
+import { ConfirmComponent } from './confirm/confirm.component';
+import { NotificationComponent } from './notification/notification.component';
 
 const routes: Routes = [
   { path: 'user', redirectTo: 'user/list', pathMatch: 'full'},
   { path: 'user/list', component: UserListComponent, canActivate: [AuthorizeGuard] },
   { path: 'user/add_edit', component: AddComponent, canActivate: [AuthorizeGuard] },  
+  { path: 'user/confirm', component: ConfirmComponent, canActivate: [AuthorizeGuard] },
+  { path: 'user/message', component: NotificationComponent, canActivate: [AuthorizeGuard] },
   { path: '**', component: SystemErrorComponent },
 ];
 

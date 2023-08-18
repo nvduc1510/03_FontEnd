@@ -1,31 +1,31 @@
-<body>
-	<main>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <main>
 		<div class="container">
-			<nav class="nav-bar">
-				<app-header></app-header>
-			</nav>
+            <app-header></app-header>
 			<div class="content">
+                <!-- <div>{{data.errors|json}}</div> -->
 				<div class="content-main">
 					<div class="row">
-						<form class="c-form box-shadow was-validated" [formGroup]="data">
+						<form class="c-form box-shadow was-validated" [formGroup]="data" (ngSubmit)="directionConfirm()">
 							<ul>
 								<li class="title">会員情報編集</li>
-								<li class="box-err">
-									<div class="box-err-content">Hiển thị lỗi chung lại đây</div>
+								<li class="box-err" *ngIf="messageError">
+									<div class="box-err-content">{{ messageError }}</div>
 								</li>
-								<!-- Textbox EmployeeLoginId----------------------------------------->
+                                <!-- Textbox EmployeeLoginId----------------------------------------->
                                 
-								<li class="form-group row d-flex">
+                                <li class="form-group row d-flex">
                                     <label class="col-form-label col-sm-2"><i class="relative">カタカナ氏名:<span class="note-red">*</span></i></label>
                                     <div class="col-sm col-sm-10">
-                                        <input type="text" class="form-control" formControlName="employeeLoginId" [ngClass]="{'is-invalid' : submitted && data.controls['employeeLoginId'].errors}" [readonly] = 'disEmployeeName' [class.readonLy]="disEmployeeName" >
+                                        <input type="text" class="form-control" formControlName="employeeLoginId" [ngClass]="{'is-invalid' : submitted && data.controls['employeeLoginId'].errors}"  >
                                         <div *ngIf="((data.get('employeeLoginId')?.errors) && ( data.get('employeeLoginId')?.touched))|| checkValidSubmit ">
-                                            <div class="invalid-feedback " >
+                                            <div class="invalid-feedbacks " >
                                                 {{data.controls['employeeLoginId'].errors?.['params']}}
                                             </div>
                                         </div>
                                     </div>
                                 </li>
+                                <!-- Hiển thị danh sách department---------------------------------------->
 								<li class="form-group row d-flex">
 									<label class="col-form-label col-sm-2"><i class="relative">グループ:<span class="note-red">*</span></i></label>
 									<div class="col-sm col-sm-10">
@@ -33,93 +33,200 @@
                                             <option value="">選択してください</option>
 											<option *ngFor="let de of department" [value]="de.departmentId">{{de?.departmentName}}</option>
 										</select>
+                                        <div *ngIf="(data.get('departmentId')?.errors && ( data.get('departmentId')?.touched  )) || checkValidSubmit">
+                                            <div class="invalid-feedbacks">
+                                                {{data.controls['departmentId'].errors?.['params']}}
+                                            </div>
+                                        </div>
 									</div>
 								</li>
+                                <!-- Textbox employeeName------------------------------------------------>
 								<li class="form-group row d-flex">
 									<label class="col-form-label col-sm-2"><i class="relative">氏名:<span class="note-red">*</span></i></label>
-									<div class="col-sm col-sm-10"><input type="text" class="form-control"></div>
+									<div class="col-sm col-sm-10">
+                                        <input type="text" class="form-control" formControlName="employeeName">
+                                        <div *ngIf=" (data.get('employeeName')?.errors && (data.get('employeeName')?.touched )) || checkValidSubmit">
+                                            <div class="invalid-feedbacks">
+                                                {{data.controls['employeeName'].errors?.['params']}}
+                                            </div>
+                                        </div>
+                                    </div>
 								</li>
+                                <!-- Textbox employeeNameKana -------------------------------------------------------->
 								<li class="form-group row d-flex">
 									<label class="col-form-label col-sm-2"><i class="relative">カタカナ氏名:<span class="note-red">*</span></i></label>
-									<div class="col-sm col-sm-10">
-										<input type="text" class="form-control" required>
-										<div class="invalid-feedback">Example invalid form file feedback</div>
+									<div class="col-sm col-sm-10">                                       
+										<input type="text" class="form-control" formControlName="employeeNameKana">
+                                        <div *ngIf="(data.get('employeeNameKana')?.errors && ( data.get('employeeNameKana')?.touched )) || checkValidSubmit">
+                                            <div class="invalid-feedbacks">
+                                                {{data.controls['employeeNameKana'].errors?.['params']}}
+                                            </div>
+                                        </div>
 									</div>
 								</li>
+                                <!-- Textbox employeeBirthDate---------------------------------------------->
 								<li class="form-group row d-flex">
 									<label class="col-form-label col-sm-2"><i class="relative">生年月日:<span class="note-red">*</span></i></label>
 									<div class="col-sm col-sm-10 d-flex">
-										<div class="input-group date datepicker" data-date-format="dd-mm-yyyy">
-											<input class="form-control" readonly="" type="text">
-											<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+										<div class="input-group date datepicker"  data-date-format="dd-mm-yyyy">                                       
+											<input class="form-control"  #dp="bsDatepicker" bsDatepicker [bsValue]="bsValue" formControlName="employeeBirthDate" [bsConfig]="bsConfig" >
+											<span class="input-group-addon"><i class="glyphicon glyphicon-calendar" ></i></span>
 										</div>
+                                        <div *ngIf=" (data.get('employeeBirthDate')?.errors && ( data.get('employeeBirthDate')?.touched)) || checkValidSubmit">
+                                            <div class="invalid-feedbacks">
+                                                {{data.controls['employeeBirthDate'].errors?.['params']}}
+                                            </div>
+                                        </div>
 									</div>
 								</li>
+                                <!--Textbox employeeEmail------------------------------------------------------->
 								<li class="form-group row d-flex">
 									<label class="col-form-label col-sm-2"><i class="relative">メールアドレス:<span class="note-red">*</span></i></label>
-									<div class="col-sm col-sm-10"><input type="text" class="form-control"></div>
+									<div class="col-sm col-sm-10">                                     
+                                        <input type="text" class="form-control" formControlName="employeeEmail">
+                                        <div *ngIf="(data.get('employeeEmail')?.errors && ( data.get('employeeEmail')?.touched )) || checkValidSubmit">
+                                            <div class="invalid-feedbacks">
+                                                {{data.controls['employeeEmail'].errors?.['params']}}
+                                            </div>
+                                        </div>
+                                    </div>
 								</li>
+                                <!-- Textbox employeeTelePhone------------------------------------------------>
 								<li class="form-group row d-flex">
 									<label class="col-form-label col-sm-2"><i class="relative">電話番号:<span class="note-red">*</span></i></label>
-									<div class="col-sm col-sm-10"><input type="text" class="form-control"></div>
+									<div class="col-sm col-sm-10">
+                                        <input type="text" class="form-control" formControlName="employeeTelephone">
+                                        <div *ngIf="(data.get('employeeTelephone')?.errors && ( data.get('employeeTelephone')?.touched)) || checkValidSubmit">
+                                            <div class="invalid-feedbacks">
+                                                {{data.controls['employeeTelephone'].errors?.['params']}}
+                                            </div>
+                                        </div>
+                                    </div>
 								</li>
+                                <!-- Textbox employeeLoginPassword-------------------------------->
 								<li class="form-group row d-flex">
 									<label class="col-form-label col-sm-2"><i class="relative">パスワード:<span class="note-red">*</span></i></label>
-									<div class="col-sm col-sm-10"><input type="text" class="form-control"></div>
+									<div class="col-sm col-sm-10"> 
+                                        <input type="password" class="form-control" formControlName="employeeLoginPassword">
+                                        <div *ngIf="(data.get('employeeLoginPassword')?.errors && ( data.get('employeeLoginPassword')?.touched )) || checkValidSubmit">
+                                            <div class="invalid-feedbacks">
+                                                {{data.controls['employeeLoginPassword'].errors?.['params']}}
+                                            </div>
+                                        </div>
+                                    </div>
 								</li>
+                                <!--Textbox employeeLoginPasswordConfirm  -------------------------------->
 								<li class="form-group row d-flex">
 									<label class="col-form-label col-sm-2"><i class="relative">パスワード（確認）:</i></label>
-									<div class="col-sm col-sm-10"><input type="text" class="form-control"></div>
+									<div class="col-sm col-sm-10">      
+                                        <input type="password" class="form-control" formControlName="employeeLoginPasswordConfirm">
+                                        <div *ngIf="(data?.errors && ( data.get('employeeLoginPasswordConfirm')?.touched )) || checkValidSubmit">
+                                            <div class="invalid-feedbacks">
+                                                {{data.errors?.['params']}}
+                                            </div>
+                                        </div>
+                                    </div>
 								</li>
 								<li class="title mt-12">日本語能力</li>
-								<!-- Phần certification của employee---------------------------------------------------------->
-								<div formGroupName="certifications">
-									<!-- CertificationId---------------------------------------------------------------------->
-									<li class="form-group row d-flex">
-										<label class="col-form-label col-sm-2"><i class="relative">資格:</i></label>
-										<div class="col-sm col-sm-10">
-											<select class="form-control" formControlName="certificationId">
-												<option value="">選択してください</option>
-												<option *ngFor="let ce of certification" [value]="ce.certificationId">{{ce.certificationName}}</option>
-											</select>
-										</div>
-									</li>
-									<li class="form-group row d-flex">
-										<label class="col-form-label col-sm-2"><i class="relative">資格交付日:<span class="note-red">*</span></i></label>
-										<div class="col-sm col-sm-10 d-flex">
-											<div id="datepicker" class="input-group date datepicker" data-date-format="dd-mm-yyyy">
-												<input class="form-control" readonly="" type="text">
-												<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-											</div>
-										</div>
-									</li>
-									<li class="form-group row d-flex">
-										<label class="col-form-label col-sm-2"><i class="relative">失効日:<span class="note-red">*</span></i></label>
-										<div class="col-sm col-sm-10 d-flex">
-											<div class="input-group date datepicker" data-date-format="dd-mm-yyyy">
-												<input class="form-control" readonly="" type="text">
-												<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-											</div>
-										</div>
-									</li>
-									<li class="form-group row d-flex">
-										<label class="col-form-label col-sm-2"><i class="relative">点数:</i></label>
-										<div class="col-sm col-sm-10"><input type="text" class="form-control"></div>
-									</li>
-									<li  class="form-group row d-flex">
-										<div class="btn-group col-sm col-sm-10 ml">
-											<button type="button" class="btn btn-primary btn-sm" onClick="location.href = './ADM005.html';return false;">確認</button>
-											<button type="button" class="btn btn-secondary btn-sm" onClick="location.href = './ADM002.html';return false;">戻る</button>
-										</div>
-									</li>
-								</div>
+
+                                <!-- Phần certification của employee---------------------------------------------------------->
+                                <div formGroupName="certifications">
+                                    <!-- Hiển thị danh sách certification----------------------------------------------------->
+                                    <!-- Textbox certificationId-------------------------------------------------->
+                                    <li class="form-group row d-flex">
+                                        <label class="col-form-label col-sm-2"><i class="relative">資格:</i></label>
+                                        <div class="col-sm col-sm-10">
+                                            <select class="form-control" formControlName="certificationId" (change)="onChangeCertification()">
+                                                <option value="">選択してください</option>
+                                                <option *ngFor="let ce of certification" [value]="ce.certificationId">{{ce.certificationName}}</option>
+                                            </select>
+                                        </div>
+                                    </li>
+									
+                                <ng-container *ngIf="hadCertification; else nonCertification">
+                                    <!-- Textbox certificationStartDate------------------------------------------>
+                                    <li class="form-group row d-flex">
+                                        <label class="col-form-label col-sm-2"><i class="relative">資格交付日:<span class="note-red">*</span></i></label>
+                                        <div class="col-sm col-sm-10 d-flex">
+                                            <div id="datepicker" class="input-group date datepicker" data-date-format="dd-mm-yyyy">
+                                                <input class="form-control"  #dp="bsDatepicker" bsDatepicker [bsValue]="bsValue" formControlName="certificationStartDate" [bsConfig]="bsConfig" >
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" ></i></span>
+                                            </div>
+                                            <div *ngIf="(data.get('certifications.certificationStartDate')?.errors && ( data.get('certifications.certificationStartDate')?.touched))  || checkValidSubmit">
+                                                <div class="invalid-feedbacks">
+                                                    {{data.get('certifications.certificationStartDate')?.errors?.['params']}}
+                                                </div>
+                                            </div>  
+                                        </div>
+                                    </li>
+                                    <!-- Textbox certificationEndDate--------------------------------------------->
+                                    <li class="form-group row d-flex">
+                                        <label class="col-form-label col-sm-2"><i class="relative">失効日:<span class="note-red">*</span></i></label>
+                                        <div class="col-sm col-sm-10 d-flex">
+                                            <div class="input-group date datepicker" data-date-format="dd-mm-yyyy">
+                                                <input class="form-control" readonly="" bsDatepicker  [bsValue]="bsValue" type="text" [bsConfig]="bsConfig" formControlName="certificationEndDate" />
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                            </div>   
+                                            <div *ngIf="((data.get('certifications')?.errors || data.get('certifications.certificationEndDate')?.errors ) && ( data.get('certifications.certificationEndDate')?.touched))  || checkValidSubmit">
+                                                <div class="invalid-feedbacks">
+                                                    {{data.get('certifications')?.errors?.['params'] || data.get('certifications.certificationEndDate')?.errors?.['params']}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- Textbox employeeCertificationScore-------------------------------------->
+                                    <li class="form-group row d-flex">
+                                        <label class="col-form-label col-sm-2"><i class="relative">点数:</i></label>
+                                        <div class="col-sm col-sm-10">
+                                            <input type="text" class="form-control" formControlName="" formControlName="employeeCertificationScore"> 
+                                            <div *ngIf="(data.get('certifications.employeeCertificationScore')?.errors && ( data.get('certifications.employeeCertificationScore')?.touched))  || checkValidSubmit">
+                                                <div class="invalid-feedbacks">
+                                                    {{data.get('certifications.employeeCertificationScore')?.errors?.['params']}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ng-container>
+                                    <li  class="form-group row d-flex">
+                                        <div class="btn-group col-sm col-sm-10 ml">
+                                            <button type="submit" class="btn btn-primary btn-sm">確認</button>
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="cancel()">戻る</button>
+                                        </div>
+                                    </li>
+                                </div>
 							</ul>
 						</form>
 					</div>
 				</div>
 
 			</div>
-			<app-footer></app-footer>
-		</div>	
+            <app-footer></app-footer>
+		</div>
 	</main>
-</body>
+
+    <ng-template #nonCertification>
+        <li class="form-group row d-flex">
+            <label class="col-form-label col-sm-2">資格交付日:</label>
+            <div class="col-sm col-sm-10 d-flex">
+                <div class="input-group date datepicker format" data-date-format="dd-mm-yyyy">
+                <input class="form-control" readonly type="text" placeholder="yyyy/MM/dd" />
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+        </div>
+        </li>
+        <li class="form-group row d-flex">
+            <label class="col-form-label col-sm-2">失効日:</label>
+            <div class="col-sm col-sm-10 d-flex">
+            <div class="input-group date datepicker format" data-date-format="dd-mm-yyyy">
+                <input class="form-control" readonly type="text" placeholder="yyyy/MM/dd" />
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+        </div>
+        </li>
+        <li class="form-group row d-flex ">
+            <label class="col-form-label col-sm-2">点数:</label>
+            <div class="col-sm col-sm-10 " >
+            <input type="text" class="form-control format" placeholder="点数" readonly />
+        </div>
+        </li>
+    </ng-template>

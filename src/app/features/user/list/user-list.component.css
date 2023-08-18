@@ -1,11 +1,11 @@
-.text-wrap {
+/* .text-wrap {
   white-space: pre-wrap;
   word-wrap: break-word;
-}
-
+} */
 
 .css-grid-table-header>div,
 .css-grid-table-body>div {
   overflow: hidden;
   text-overflow: ellipsis;
+  word-wrap: break-word;
 }
